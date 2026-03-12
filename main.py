@@ -12,7 +12,7 @@ def main():
     ]
 
     winner = lottery(names, seed)
-    print(f"The winner is {winner}")
+    print(f"The loser is {winner}")
 
 def lottery(names: list[str], seed: int | None = None) -> str:
     random.seed(seed)
