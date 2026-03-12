@@ -14,3 +14,16 @@ jobs:
         with:
           python-version: '3.11'
       - run: python main.py
+      - name: Generate sha256 list (exclude .git)
+        run: |
+          find . -type f \
+            -not -path './.git' \
+            -not -path './.git/*' \
+            -print0 \
+          | sort -z \
+          | xargs -0 sha256sum > sha256sum_list.txt
+      - name: Upload sha256 list
+        uses: actions/upload-artifact@v4
+        with:
+          name: sha256sum-list
+          path: sha256sum_list.txt
