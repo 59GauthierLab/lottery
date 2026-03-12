@@ -8,6 +8,8 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,8 +24,12 @@ jobs:
             -print0 \
           | sort -z \
           | xargs -0 sha256sum > sha256sum_list.txt
-      - name: Upload sha256 list
-        uses: actions/upload-artifact@v4
+      - name: Prepare release tag
+        id: release_tag
+        run: echo "tag=sha256sum-${GITHUB_RUN_NUMBER}" >> "${GITHUB_OUTPUT}"
+      - name: Upload sha256 list to Release Asset
+        uses: softprops/action-gh-release@v2
         with:
-          name: sha256sum-list
-          path: sha256sum_list.txt
+          tag_name: ${{ steps.release_tag.outputs.tag }}
+          name: SHA256 List ${{ steps.release_tag.outputs.tag }}
+          files: sha256sum_list.txt
