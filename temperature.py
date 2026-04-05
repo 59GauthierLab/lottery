@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 
 def measure_temperature_mock(seed: int | None = None) -> float:
     """Mock の体温を生成する．"""
-    random.seed(seed)
-    return round(random.uniform(35.8, 40.0), 1)
+    rng = random.Random(seed)
+    return round(rng.uniform(35.8, 40.0), 1)
 
 
 def main() -> None:
